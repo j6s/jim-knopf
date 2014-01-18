@@ -86,15 +86,24 @@ Knob.prototype = {
     var range = this.settings.range;
     var value = this.min + range * percent;
 
-    var step = (this.settings.max - this.min) / range;
+    var step = this.input.step;
+    console.log(["value",value,"step",step])
     this.value = this.input.value = Math.round(value / step) * step;
     this.ui.update(percent, this.value);
+
+    if(typeof(this.input.onchange) == "function") {
+      this.input.onchange();
+    }
+
   },
 
   changed: function(direction) {
     this.input.value = this.limit(parseFloat(this.input.value) + direction * (this.input.step || 1));
     this.value = this.input.value;
     this.ui.update(this._valueToPercent(), this.value);
+    if(typeof(this.input.onchange) == "function") {
+      this.input.onchange();
+    }
   },
 
   _valueToPercent: function() {
