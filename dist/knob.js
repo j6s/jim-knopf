@@ -29,7 +29,7 @@ Knob = function(input, ui) {
     container.addEventListener(event, events[event], false);
   }
 
-  container.style.cssText = 'position: relative; width:' + settings.width + 'px;' + 'height:' + settings.height + 'px;';
+  container.style.cssText = 'position: absolute; width:' + settings.width + 'px;' + 'height:' + settings.height + 'px;';
 
   ui.init(container, settings);
   this.container = container;
@@ -56,8 +56,33 @@ Knob.prototype = {
   },
 
   _handleMove: function(onMove, onEnd) {
-    this.centerX = this.container.offsetLeft + this.settings.width / 2;
-    this.centerY = this.container.offsetTop + this.settings.height / 2;
+
+      /*
+    function getOffsetTop(element){
+        if(element.parentElement){
+            //if(element.offsetTop !== element.parentNode.offsetTop){
+            console.log(element.offsetTop,element.getBoundingClientRect().top,element);
+
+            return element.offsetTop + getOffsetTop(element.parentElement);
+            //}
+        }
+        return element.offsetTop;
+    }
+
+      function getOffsetLeft(element){
+          if(element.parentElement){
+              return element.offsetLeft + getOffsetLeft(element.parentElement);
+          }
+          return element.offsetLeft;
+      }
+    */
+
+
+      var rect = this.container.getBoundingClientRect();
+
+    this.centerX = rect.left + this.settings.width / 2;
+    this.centerY = rect.top + document.querySelector("body").scrollTop +  this.settings.height / 2;
+      console.log([rect.top,this.centerY]);
     var fnc = this._updateWhileMoving.bind(this);
     var body = document.body;
     body.addEventListener(onMove, fnc, false);
@@ -71,9 +96,8 @@ Knob.prototype = {
     var e = event.changedTouches ? event.changedTouches[0] : event;
     var x = this.centerX - e.pageX;
     var y = this.centerY - e.pageY;
-    var deg = Math.abs(Math.atan2(-y, -x) * 180 / Math.PI + 90 - this.settings.angleoffset)*this.settings.multiplier;
+    var deg =Math.atan2(-y, -x) * 180 / Math.PI + 90 - this.settings.angleoffset;
     var percent;
-    console.log(["deg",deg]);
 
     if (deg < 0) {
       deg += 360;
@@ -85,11 +109,11 @@ Knob.prototype = {
       percent = +(deg - this.settings.anglerange < (360 - this.settings.anglerange) / 2);
     }
     var range = this.settings.range;
-    console.log([this.min,range,percent,this.settings]);
+    //console.log([this.min,range,percent,this.settings]);
     var value = this.min + range * percent;
 
     var step = this.input.step;
-    console.log(["value",value,"step",step])
+    //console.log(["value",value,"step",step])
     this.value = this.input.value = Math.round(value / step) * step;
     this.ui.update(percent, this.value);
 

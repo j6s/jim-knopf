@@ -28,7 +28,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['lib/**/*.*', 'test/**/*.js', 'grunt.js'],
-      tasks: 'concat min buster'
+      tasks: 'concat min'
     },
     jshint: {
       options: {
