@@ -1,3 +1,7 @@
+NOTICE: this is a modified version of jim-knopf to fit the use case of the TYPO3 extension [HTML5audioplayer by NIMIUS](https://github.com/nimius/TYPO3.EXT.HTML5-Audio-Player)
+
+---
+
 Jim Knopf is a small JavaScript library to create knobs using SVG.
 
 ##Supported Browser
